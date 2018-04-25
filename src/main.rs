@@ -1,6 +1,7 @@
 // Task 1: Read in parameters. Make much clearer that C source.
 mod generation_rule;
 mod simple_step_range;
+mod map_generator;
 use std::env;
 use std::process;
 use std::num;
@@ -20,17 +21,16 @@ fn main() {
         println!("rule {:?}: ({:?})", i + 1, rule);
     }
 
-    //    let mut vec_1 = Vec::<usize>::new();
-    //    let mut vec_2 = Vec::<usize>::new();
+    let (map, x, y) = map_generator::create_random_cave_map(x_size, y_size, fill_percent, rules);
 
-    // TODO: Size these
-    //    vec_1.push(1);
-    //    vec_2.push(1);
+    // TODO: Expand below into a real output printer.
+    println!("output: {:?}, {:?}, {:?}", map, x, y);
+
     process::exit(EXIT_SUCCESS);
 }
 
 fn process_args(args: &[String]) -> (i32, i32, i32, Vec<generation_rule::GenerationRule>) {
-    if (args.len() - 1 - 3) % 3 != 0 {
+    if args.len() < 6 || (args.len() - 1 - 3) % 3 != 0 {
         println!(
             "Usage: {:?} x_size y_size fill_% (rule_1 rule_2 number_of_times_to_apply)+",
             &args[0]
