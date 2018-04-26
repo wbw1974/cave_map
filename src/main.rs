@@ -1,4 +1,6 @@
 // Task 1: Read in parameters. Make much clearer that C source.
+extern crate rand;
+
 mod generation_rule;
 mod simple_step_range;
 mod map_generator;
