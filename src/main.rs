@@ -1,4 +1,3 @@
-// Task 1: Read in parameters. Make much clearer that C source.
 extern crate rand;
 
 mod generation_rule;
