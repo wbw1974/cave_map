@@ -32,7 +32,7 @@ fn main() {
 }
 
 fn process_args(args: &[String]) -> (i32, i32, i32, Vec<generation_rule::GenerationRule>) {
-    if args.len() < 6 || (args.len() - 1 - 3) % 3 != 0 {
+    if args.len() < 6 || (args.len() - 4) % 3 != 0 {
         println!(
             "Usage: {:?} x_size y_size fill_% (rule_1 rule_2 number_of_times_to_apply)+",
             &args[0]
