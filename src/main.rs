@@ -23,10 +23,9 @@ fn main() {
         println!("rule {:?}: ({:?})", i + 1, rule);
     }
 
-    let (map, x, y) = map_generator::create_random_cave_map(x_size, y_size, fill_percent, rules);
-
-    // TODO: Expand below into a real output printer.
-    println!("output: {:?}, {:?}, {:?}", map, x, y);
+    let map = map_generator::create_random_cave_map(x_size, y_size, fill_percent, &rules);
+    map_generator::print_function(&rules, fill_percent);
+    map_generator::print_map(map);
 
     process::exit(EXIT_SUCCESS);
 }

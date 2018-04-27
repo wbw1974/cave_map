@@ -6,8 +6,8 @@ pub fn create_random_cave_map(
     x_size: i32,
     y_size: i32,
     fill_percent: i32,
-    rules: Vec<generation_rule::GenerationRule>,
-) -> (Vec<Vec<bool>>, i32, i32) {
+    rules: &Vec<generation_rule::GenerationRule>,
+) -> Vec<Vec<bool>> {
     let mut rng = rand::thread_rng();
     let (mut grid_1, mut grid_2) = inititalize_map(x_size, y_size, fill_percent, &mut rng);
     // walk through generation rules
@@ -19,7 +19,7 @@ pub fn create_random_cave_map(
         }
     }
 
-    return (grid_1, 0, 0);
+    return grid_1;
 }
 
 fn random_select<R: Rng>(rng: &mut R, fill_percent: i32) -> bool {
@@ -72,9 +72,7 @@ fn generation(
 
             for ii in -1..1 {
                 for jj in -1..1 {
-                    let idx_1 = (yi + ii) as usize;
-                    let idx_2 = (xi + jj) as usize;
-                    if grid_1[idx_1][idx_2] == true {
+                    if grid_1[(yi + ii) as usize][(xi + jj) as usize] == true {
                         adj_count_r1 += 1;
                     }
                 }
@@ -87,9 +85,7 @@ fn generation(
                     if ii < 0 || jj < 0 || ii >= y_size || jj >= x_size {
                         continue;
                     }
-                    let idx_1 = ii as usize;
-                    let idx_2 = jj as usize;
-                    if grid_1[idx_1][idx_2] == true {
+                    if grid_1[ii as usize][jj as usize] == true {
                         adj_count_r2 += 1;
                     }
                 }
@@ -100,5 +96,52 @@ fn generation(
                 }
             }
         }
+        for yi in 1..y_size - 1 {
+            for xi in 1..x_size - 1 {
+                grid_1[yi as usize][xi as usize] = grid_2[yi as usize][xi as usize];
+            }
+        }
     }
+}
+
+pub fn print_function(rules: &Vec<generation_rule::GenerationRule>, fill_percent: i32) {
+    let mut line_1 = String::from("W[0](p) = rand[0, 100) < ");
+    line_1.push_str(&(fill_percent.to_string()));
+    line_1.push_str("\n");
+
+    let mut line_2 = String::new();
+    for ii in 0..rules.len() {
+        line_2.push_str("Repeat ");
+        line_2.push_str(&(rules[ii].times_to_apply.to_string()));
+        line_2.push_str(": W'() = R[1](p) >= ");
+        line_2.push_str(&(rules[ii].rule_1.to_string()));
+        if rules[ii].rule_2 >= 0 {
+            line_2.push_str(" || R[2](p) <= ");
+            line_2.push_str(&(rules[ii].rule_2.to_string()));
+            line_2.push_str("\n");
+        } else {
+            line_2.push_str("\n");
+        }
+    }
+    println!("{}", line_1);
+    println!("{}", line_2);
+}
+
+pub fn print_map(map: Vec<Vec<bool>>) {
+    let mut line_1 = String::new();
+    let size_y = map.len();
+    let size_x = map[0].len();
+
+    for yi in 0..size_y {
+        for xi in 0..size_x {
+            if map[xi][yi] == true {
+                line_1.push_str(".");
+            } else {
+                line_1.push_str("#");
+            }
+        }
+        line_1.push_str("\n");
+    }
+
+    println!("{}", line_1);
 }
