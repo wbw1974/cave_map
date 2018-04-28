@@ -13,19 +13,9 @@ const EXIT_SUCCESS: i32 = 0x0000;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let (x_size, y_size, fill_percent, rules) = process_args(&args);
-
-    println!("x_size: {:?}", x_size);
-    println!("y_size: {:?}", y_size);
-    println!("fill_percent: {:?}", fill_percent);
-
-    for (i, rule) in rules.iter().enumerate() {
-        println!("rule {:?}: ({:?})", i + 1, rule);
-    }
-
     let map = map_generator::create_random_cave_map(x_size, y_size, fill_percent, &rules);
     map_generator::print_function(&rules, fill_percent);
     map_generator::print_map(map);
-
     process::exit(EXIT_SUCCESS);
 }
 

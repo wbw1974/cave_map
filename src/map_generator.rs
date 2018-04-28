@@ -2,6 +2,10 @@ use generation_rule;
 use rand;
 use rand::Rng;
 
+const TILE_FLOOR: bool = true;
+const TILE_WALL: bool = false;
+
+
 pub fn create_random_cave_map(
     x_size: i32,
     y_size: i32,
@@ -24,9 +28,9 @@ pub fn create_random_cave_map(
 
 fn random_select<R: Rng>(rng: &mut R, fill_percent: i32) -> bool {
     if rng.gen::<u32>() % 100 < fill_percent as u32 {
-        return true;
+        return TILE_WALL;
     } else {
-        return false;
+        return TILE_FLOOR;
     }
 }
 
@@ -42,8 +46,8 @@ fn inititalize_map<R: Rng>(
         let mut item_1 = Vec::with_capacity(x_size as usize);
         let mut item_2 = Vec::with_capacity(x_size as usize);
         for _j in 0..x_size {
-            item_1.push(false);
-            item_2.push(false);
+            item_1.push(TILE_WALL);
+            item_2.push(TILE_WALL);
         }
         grid_1.push(item_1);
         grid_2.push(item_2);
@@ -70,8 +74,8 @@ fn generation(
             let mut adj_count_r1 = 0;
             let mut adj_count_r2 = 0;
 
-            for ii in -1..1 {
-                for jj in -1..1 {
+            for ii in -1..2 {
+                for jj in -1..2 {
                     if grid_1[(yi + ii) as usize][(xi + jj) as usize] == true {
                         adj_count_r1 += 1;
                     }
@@ -89,17 +93,17 @@ fn generation(
                         adj_count_r2 += 1;
                     }
                 }
-                if adj_count_r1 >= rule.rule_1 || adj_count_r2 <= rule.rule_2 {
-                    grid_2[yi as usize][xi as usize] = true;
-                } else {
-                    grid_2[yi as usize][xi as usize] = false;
-                }
+            }
+            if adj_count_r1 >= rule.rule_1 || adj_count_r2 <= rule.rule_2 {
+                grid_2[yi as usize][xi as usize] = TILE_WALL;
+            } else {
+                grid_2[yi as usize][xi as usize] = TILE_FLOOR;
             }
         }
-        for yi in 1..y_size - 1 {
-            for xi in 1..x_size - 1 {
-                grid_1[yi as usize][xi as usize] = grid_2[yi as usize][xi as usize];
-            }
+    }
+    for yi in 1..y_size - 1 {
+        for xi in 1..x_size - 1 {
+            grid_1[yi as usize][xi as usize] = grid_2[yi as usize][xi as usize];
         }
     }
 }
@@ -113,7 +117,7 @@ pub fn print_function(rules: &Vec<generation_rule::GenerationRule>, fill_percent
     for ii in 0..rules.len() {
         line_2.push_str("Repeat ");
         line_2.push_str(&(rules[ii].times_to_apply.to_string()));
-        line_2.push_str(": W'() = R[1](p) >= ");
+        line_2.push_str(": W'(p) = R[1](p) >= ");
         line_2.push_str(&(rules[ii].rule_1.to_string()));
         if rules[ii].rule_2 >= 0 {
             line_2.push_str(" || R[2](p) <= ");
@@ -134,10 +138,10 @@ pub fn print_map(map: Vec<Vec<bool>>) {
 
     for yi in 0..size_y {
         for xi in 0..size_x {
-            if map[xi][yi] == true {
-                line_1.push_str(".");
-            } else {
+            if map[xi][yi] == TILE_WALL {
                 line_1.push_str("#");
+            } else {
+                line_1.push_str(".");
             }
         }
         line_1.push_str("\n");
