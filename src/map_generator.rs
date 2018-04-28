@@ -133,8 +133,8 @@ pub fn print_function(rules: &Vec<generation_rule::GenerationRule>, fill_percent
 
 pub fn print_map(map: Vec<Vec<bool>>) {
     let mut line_1 = String::new();
-    let size_y = map.len();
-    let size_x = map[0].len();
+    let size_x = map.len();
+    let size_y = map[0].len();
 
     for yi in 0..size_y {
         for xi in 0..size_x {
