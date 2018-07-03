@@ -5,7 +5,16 @@ use rand::Rng;
 const TILE_FLOOR: bool = true;
 const TILE_WALL: bool = false;
 
-
+/// Accessible function that creates a random cave map of a given rectangular size,
+/// fill percentage, and Vector of GenerationRules.
+/// 
+/// Author: W. Brent Williams
+/// Since: 2018-07-03
+///
+/// Example:
+/// ```rust
+/// let map = map_generator::create_random_cave_map(x_size, y_size, fill_percent, &rules);
+/// ```
 pub fn create_random_cave_map(
     x_size: i32,
     y_size: i32,
@@ -26,6 +35,13 @@ pub fn create_random_cave_map(
     return grid_1;
 }
 
+/// Helper function that uses a random number generator to return true or false
+/// based on a given fill percentage.
+/// 
+/// Example:
+/// ```rust
+/// grid_1[yi][xi] = random_select(rng, fill_percent);
+/// ```
 fn random_select<R: Rng>(rng: &mut R, fill_percent: i32) -> bool {
     if rng.gen::<u32>() % 100 < fill_percent as u32 {
         return TILE_WALL;
@@ -34,6 +50,12 @@ fn random_select<R: Rng>(rng: &mut R, fill_percent: i32) -> bool {
     }
 }
 
+/// Helper function that initializes the map with random data.
+/// 
+/// Example:
+/// ```rust
+/// let (mut grid_1, mut grid_2) = inititalize_map(x_size, y_size, fill_percent, &mut rng);
+/// ```
 fn inititalize_map<R: Rng>(
     x_size: i32,
     y_size: i32,
@@ -62,6 +84,13 @@ fn inititalize_map<R: Rng>(
     return (grid_1, grid_2);
 }
 
+/// Helper function that applies a cellular automata rule to the initial map
+/// to generate the map.
+/// 
+/// Example:
+/// ```rust
+/// generation(&mut grid_1, &mut grid_2, rule, x_size, y_size);
+/// ```
 fn generation(
     grid_1: &mut Vec<Vec<bool>>,
     grid_2: &mut Vec<Vec<bool>>,
@@ -108,6 +137,13 @@ fn generation(
     }
 }
 
+/// Accessible function that prints out the mathematical definition of the rules used to
+/// generate a map.
+/// 
+/// Example:
+/// ```rust
+/// map_generator::print_function(&rules, fill_percent);
+/// ```
 pub fn print_function(rules: &Vec<generation_rule::GenerationRule>, fill_percent: i32) {
     let mut line_1 = String::from("W[0](p) = rand[0, 100) < ");
     line_1.push_str(&(fill_percent.to_string()));
@@ -131,6 +167,13 @@ pub fn print_function(rules: &Vec<generation_rule::GenerationRule>, fill_percent
     println!("{}", line_2);
 }
 
+/// Accessible function that prints out a generated map to STDIO using `#` for a wall
+/// and `.` for a floor.
+/// 
+/// Example:
+/// ```rust
+/// map_generator::print_map(map);
+/// ```
 pub fn print_map(map: Vec<Vec<bool>>) {
     let mut line_1 = String::new();
     let size_x = map.len();
