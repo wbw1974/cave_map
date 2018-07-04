@@ -1,8 +1,9 @@
 # Cave Map
 
-A port of the Cellular Automata Method for generating random cave-like levels <http://roguebasin.roguelikedevelopment.org/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels> to Rust.
+A port of the [Cellular Automata Method for generating random cave-like levels][1] to Rust.
 
 ## Example
+
     cave_map 45 45 45 5 1 6
     W[0](p) = rand[0, 100) < 45
 
@@ -53,3 +54,5 @@ A port of the Cellular Automata Method for generating random cave-like levels <h
     #...###..######........######..#######....###
     #...###...#####........######...######....#.#
     #############################################
+
+[1]: http://roguebasin.roguelikedevelopment.org/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels
